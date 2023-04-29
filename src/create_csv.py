@@ -7,22 +7,18 @@ from sklearn.preprocessing import LabelBinarizer
 from tqdm import tqdm
 from imutils import paths
 
-# get all the image paths
-image_paths = list(paths.list_images('../input/preprocessed_image'))
+image_paths = list(paths.list_images("../input/preprocessed_image"))
 
-# create a DataFrame 
 data = pd.DataFrame()
 
 labels = []
 for i, image_path in tqdm(enumerate(image_paths), total=len(image_paths)):
     label = image_path.split(os.path.sep)[-2]
-    # save the relative path for mapping image to target
-    data.loc[i, 'image_path'] = image_path
+    data.loc[i, "image_path"] = image_path
 
     labels.append(label)
 
 labels = np.array(labels)
-# one hot encode the labels
 lb = LabelBinarizer()
 labels = lb.fit_transform(labels)
 
@@ -32,16 +28,13 @@ print(f"Total instances: {len(labels)}")
 
 for i in range(len(labels)):
     index = np.argmax(labels[i])
-    data.loc[i, 'target'] = int(index)
+    data.loc[i, "target"] = int(index)
 
-# shuffle the dataset
 data = data.sample(frac=1).reset_index(drop=True)
 
-# save as CSV file
-data.to_csv('../input/data.csv', index=False)
+data.to_csv("../input/data.csv", index=False)
 
-# pickle the binarized labels
-print('Saving the binarized labels as pickled file')
-joblib.dump(lb, '../outputs/lb.pkl')
+print("Saving the binarized labels as pickled file")
+joblib.dump(lb, "../outputs/lb.pkl")
 
 print(data.head(10))

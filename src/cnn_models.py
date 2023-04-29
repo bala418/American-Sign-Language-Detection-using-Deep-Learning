@@ -4,7 +4,6 @@ import joblib
 
 from torchvision import models
 
-# load the binarized labels
 print('Loading label binarizer...')
 lb = joblib.load('../outputs/lb.pkl')
 
